@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+    chrome:
+        container_name: "chrome"
+        image: selenium/standalone-chrome:latest
+        environment:
+          - START_XVFB=false
+          - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+          - SE_NODE_MAX_SESSIONS=5
+          - JAVA_OPTS=-XX:ActiveProcessorCount=5
+        ports:
+          - "4444:4444"
+
+
+    article_creator:
+        container_name: "article_creator"
+        image: babaknasrolahy/article_creator:latest
+        links:
+          - chrome
+        volumes:
+          - shared_vol:/shared_files/
+          - article_vol:/articles/
+
+
+    sign_in:
+        container_name: "sign_in"
+        image: babaknasrolahy/sign_in:latest
+        links:
+          - chrome
+          - article_creator
+
+    link_creator:
+        container_name: "link_creator"
+        image: babaknasrolahy/link_creator:latest
+        links:
+          - chrome
+          - sign_in
+        volumes: 
+          - shared_vol:/shared_files/
+
+
+volumes:
+  shared_vol:
+  article_vol:
+
