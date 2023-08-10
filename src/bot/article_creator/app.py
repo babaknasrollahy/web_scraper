@@ -22,6 +22,11 @@ def connect_to_chrome():
     return webdriver.Remote(command_executor=chrome_server_url, options=options)
 ##################################################################################
 
+##########  Achieve information of an Article    #############
+
+    
+
+#############################################################
 @app.route('/creating_articles', methods=['GET','POST'])
 def creating_files():
     link = request.data.decode('utf-8')
@@ -40,12 +45,22 @@ def creating_files():
                     try:
                         driver.set_page_load_timeout(20)
                         driver.get(url)
-                        
+                        ###########################  Achieve all of Information  ##############################
                         # Find the element and get its text content
                         element = driver.find_element(By.TAG_NAME , "article")
-                        text = element.text
+                        cont_en = element.text
+                        ######################
+                        # Achieve header of an article
+                        header = file_name
+                        ######################
+                        # Achieve Writer's name
+                        writer_name = element.find_element(By.CSS_SELECTOR ,"a[data-testid='authorName']")
+                        print(writer_name.text)
+
+
+                        #########################################################################################
                         with open(f'../articles/{file_name}.txt' , 'a') as f :
-                            f.write(text)
+                            f.write(cont_en)
                         print(f"file {file_name} was created.")
                     except: "there are some errors, while writing articles!!!"
     return "all files were created."
