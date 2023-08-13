@@ -54,7 +54,7 @@ def get_title(title):
                         link = article.find_elements(By.TAG_NAME, 'a')[3]
                         link_url = link.get_attribute("href")  
                         with open("../shared_files/New_links.txt" , 'a') as file :
-                            file.write(f"{titles.text}==={link_url}\n")
+                            file.write(f"{titles.text}==={link_url}==={year}-{month}-{day}\n")
                 except: 
                     print("error through find element !!!")
             #######################################################################

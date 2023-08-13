@@ -9,8 +9,8 @@ from datetime import date
 ###################   Create Conncetion to DataBase   ########################
 def connect_to_database():
     db = mysql.connector.connect(
-        host="localhost",
-        port="6603",
+        host="mysql",
+        port="3306",
         user="root",
         password="babak13830",
         database="stack_mag"
@@ -76,7 +76,39 @@ def add_tag(tag):
         requests.get(f"http://localhost:5000/send_active/{tag}")
     return "This is the End of add_tag Function\n"
     
+
+
+# to get tags from bot and write those tags in the DataBase
+@app.route('/add_tag_bot/<tag>')
+def add_tag_bot(tag):
+    db = connect_to_database()
+    db_cursor = db.cursor()
+    sql_qu = "SELECT tag FROM tags WHERE tag = %s "
+    ch_result = db_cursor.execute(sql_qu , (tag,))
+    ch_result= db_cursor.fetchall()
     
+    if ch_result :
+        print(f"{tag} tag is already exit!!")
+    
+    else: 
+        ch_active = "SELECT * FROM tags WHERE status = %s"
+        result = db_cursor.execute(ch_active , ("active",))
+        result = db_cursor.fetchall()
+        if result:
+            add_pending_tag = "INSERT INTO tags(owner,tag,status,date) VALUES('bot', %s , 'pending', %s)"
+            db_cursor.execute(add_pending_tag , (tag,today))
+            db.commit()
+        else : 
+            add_active_tag = "INSERT INTO tags(owner,tag,status,date) VALUES('bot', %s , 'active', %s)"
+            db_cursor.execute(add_active_tag , (tag,today))
+            db.commit()
+            # requests.get(f"http://link_creator:5000/title/{tag}") ###########
+            requests.get(f"http://localhost:5000/send_active/{tag}")
+        
+        
+    
+
+
 ###### Changing active tag ######
 @app.route('/complete/')
 def set_complete():

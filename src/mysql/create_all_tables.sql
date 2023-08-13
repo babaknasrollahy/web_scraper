@@ -26,8 +26,9 @@ CREATE TABLE informations
     tag_id INT,
     title VARCHAR(100),
     `date` DATE,
-    `like` INT,
+    `like` VARCHAR(15),
     writer VARCHAR(50),
+    tags VARCHAR(50),
     FOREIGN KEY (cont_id) REFERENCES contents(cont_id),
     FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
 

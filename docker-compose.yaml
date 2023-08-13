@@ -43,7 +43,7 @@ services:
       container_name: "mysql"
       image: mysql:latest
       volumes:
-        - /home/ali/stack_mag/src/mysql/create_all_tables.sql:/file.sql
+        - /home/babak/stack_mag/src/mysql/create_all_tables.sql:/file.sql
       command: --default-authentication-plugin=mysql_native_password
       environment:
         - MYSQL_ROOT_PASSWORD=babak13830
@@ -64,6 +64,13 @@ services:
           - tag_checker
         ports:
           - 5000:5000
+
+    content_writer:
+      container_name: "content_writer"
+      image: babaknasrolahy/content_writer:latest
+      links:
+       - mysql
+
 volumes:
   shared_vol:
   article_vol:
