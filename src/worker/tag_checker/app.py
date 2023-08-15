@@ -104,6 +104,8 @@ def add_tag_bot(tag):
             db.commit()
             # requests.get(f"http://link_creator:5000/title/{tag}") ###########
             requests.get(f"http://localhost:5000/send_active/{tag}")
+            
+    return "End on add_tag_bot"
         
         
     
@@ -161,7 +163,8 @@ def show_active():
     get_active = "SELECT tag_id,tag FROM tags WHERE status = 'active' "
     db_cursor.execute(get_active)
     result = db_cursor.fetchall()
-    return f"{result[0][0]}"  
+    result = f"{result[0][0]}---{result[0][1]}"
+    return f"{result}"
 
     
     

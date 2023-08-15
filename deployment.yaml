@@ -1,0 +1,270 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chrome-deployment
+  labels:
+    name: chrome
+    app: bot
+
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      name: chrome
+      app: bot
+  
+  template:
+    metadata:
+      name: chrome-pod
+      labels:
+        name: chrome
+        app: bot
+
+    spec:
+      containers:
+        - name: chrome_container
+          image: selenium/standalone-chrome:latest
+          env:
+            - name: "START_XVFB"
+              value: "false"
+            - name: "SE_NODE_OVERRIDE_MAX_SESSIONS"
+              value: "true"
+            - name: "SE_NODE_MAX_SESSION"
+              value: 5
+            - name: "JAVA_OPTS=-XX:ActiveProcessorCount"
+              value: 5
+
+          ports:
+            - containerPort: 4444
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    name: api
+    app: api
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: api
+      app: api
+
+  template:
+    metadata:
+      name: api-pod
+      labels:
+        name: api
+        app: api
+    spec:
+      containers:
+        - name: api_container
+          image: babaknasrolahy/api:latest
+
+    ports:
+      - containerPort: 5000
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tag_checker-deployment
+  labels:
+    name: tag_checker
+    app: worker
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: tag_checker
+      app: worker
+    
+  template:
+    metadata:
+      name: tag_checker-pod
+      labels:
+        name: tag_checker
+        app: worker
+
+    spec:
+      containers:
+        - name: tag_checker_container
+          image: babaknasrolahy/tag_checker:latest
+          ports:
+            - containerPort: 5000
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content_writer-deployment
+  labels:
+    name: content_writer
+    app: worker
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: content_writer
+      app: worker
+
+  template:
+    metadata:
+      name: content_writer-pod
+      labels:
+        name: content_writer
+        app: worker
+
+    spec:
+      containers:
+        - name: content_writer_container
+          image: babaknasrolahy/content_writer:latest
+          ports:
+            - containerPort: 5000
+
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content_reader-deployment
+  labels: 
+    name: content_reader
+    app: worker
+
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      name: content_reader
+      app: worker
+
+  template:
+    metadata:
+      name: content_reader-pod
+      labels:
+        name: content_reader
+        app: worker
+
+    spec:
+      containers:
+        - name: content_reader_container
+          image: babaknasrolahy/content_reader:latest
+          ports:
+            - containerPort: 5000
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: link_creator-deployment
+  labels:
+    name: link_creator
+    app: bot
+  
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      name: link_creator
+      app: bot
+
+  template:
+    metadata:
+      name: link_creator-pod
+      lables:
+        name: link_creator
+        app: bot
+
+    spec:
+      containers:
+        - name: link_creator_container
+          image: babaknasrolahy/link_creator:latest
+          ports:
+            - containerPort: 5000
+
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sign_in-deployment
+  labels:
+    name: sign_in
+    app: bot
+
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      name: sign_in
+      app: bot
+
+  template:
+    metadata:
+      labels:
+        name: sign_in
+        app: bot
+    spec:
+      containers:
+        - name: sign_in_container
+          image:  babaknasrolahy/sign_in:latest
+          ports:
+            - containerPort: 5000
+
+
+--- 
+
+  
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: article_creator-deployment
+  labels:
+    name: article_creator
+    app: bot
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: article_creator
+      app: bot
+  
+  template:
+    metadata:
+      name: article_creator-pod
+      labels:
+        name: article_creator
+        app: bot
+
+    spec:
+      containers:
+        - name: article_creator_container
+          image: babaknasrolahy/article_creator:latest
+
+          ports:
+            - containerPort: 5000
+
+
+
+
+
+

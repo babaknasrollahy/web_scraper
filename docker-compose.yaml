@@ -71,6 +71,13 @@ services:
       links:
        - mysql
 
+    content_reader:
+        container_name: "content_reader"
+        image: babaknasrolahy/content_reader:latest
+        links:
+          - mysql
+          - api
+
 volumes:
   shared_vol:
   article_vol:

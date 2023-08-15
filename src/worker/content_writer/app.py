@@ -1,8 +1,9 @@
-from flask import Flask,request, jsonify
+from flask import Flask,request
 import mysql.connector
 
 app = Flask(__name__)
 
+########    conneting to the DataBase   #########
 def connect_to_database():
     db = mysql.connector.connect(
         host="mysql",
@@ -12,7 +13,7 @@ def connect_to_database():
         database="stack_mag"
     )
     return db
-
+###################################################
 
 @app.route('/receive_json/', methods=['GET','POST'])
 def receive_text():

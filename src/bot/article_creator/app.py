@@ -35,8 +35,14 @@ def creating_files():
     driver = connect_to_chrome()
     driver.get(link)
     print("login was successful")
-
-    with open('../shared_files/New_links.txt' , 'r') as file:
+    
+    # Achieve tag_id and tag
+    active = requests.get('http://tag_checker:5000/show_active')
+    active = active.text
+    tag_id = active.split('---')[0]
+    tag = active.split('---')[1]
+    
+    with open(f'../shared_files/{tag}_links.txt' , 'r') as file:
             all_text = file.readlines()
             for text in all_text:
                 val = text.split("===")    
@@ -65,17 +71,18 @@ def creating_files():
                     # Achieve date
                     date = val[2]
                     #######################
-                    # Achieve tag_id
-                    tag_id = requests.get('http://tag_checker:5000/show_active')
-                    tag_id = int(tag_id.text)
+
                     #######################
                     # Achieve all tags and send tags to tag_checher .
-                    # tags = driver.find_elements(By.CLASS_NAME , "oa")
-                    # tags_list = tags[0].text.split("\n")
-                    # for item in tags_list:
-                    #     requests.get(f"http://tag_checker:5000/add_tag_bot/{item}")
-                    #     sleep(1)
-                    # tags = tags[0].text.replace("\n",",")
+                    tags = driver.find_elements(By.TAG_NAME , "a")
+                    tags_list = []
+                    other_tags = ""
+                    for item in tags:
+                        if "/tag" in item.get_attribute("href"):
+                            tags_list.append(item.text)
+                            other_tags += item.text + " "
+                    
+    #                     #############
                     ########################
                     #########################################################################################
                     
@@ -88,7 +95,7 @@ def creating_files():
                         "date" : date,
                         "like" : like, 
                         "writer" : writer,
-                        "other_tags" : "tags"
+                        "other_tags" : other_tags
                     }
                     headers = {'Content-Type': 'application/json'}
                     receiver = "http://content_writer:5000/receive_json/" 
@@ -96,6 +103,9 @@ def creating_files():
                     # Process the response if needed
                     if response.status_code == 200:
                         print('Text sent successfully')
+                        for index in tags_list:
+                            requests.get(f"http://tag_checker:5000/add_tag_bot/{index}")
+                            sleep(0.5)
                     else:
                         print('Error sending text')
                         

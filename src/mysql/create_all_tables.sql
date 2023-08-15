@@ -4,7 +4,7 @@ CREATE TABLE tags
 (
     tag_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `owner` ENUM('admin', 'bot') ,
-    tag VARCHAR(15) NOT NULL UNIQUE,
+    tag VARCHAR(50) NOT NULL UNIQUE,
     `status` ENUM('active', 'pending' , 'completed'),
     `date` DATE
 );
@@ -24,11 +24,11 @@ CREATE TABLE informations
 (
     cont_id INT,
     tag_id INT,
-    title VARCHAR(100),
+    title VARCHAR(150),
     `date` DATE,
     `like` VARCHAR(15),
     writer VARCHAR(50),
-    tags VARCHAR(50),
+    tags VARCHAR(100),
     FOREIGN KEY (cont_id) REFERENCES contents(cont_id),
     FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
 
