@@ -18,6 +18,7 @@ def connect_to_chrome():
     options.add_argument('--no-sandbox')
     options.add_argument('--headless')
     options.add_argument('--disable-dev-shm-usage')
+    options.page_load_strategy = 'eager'
 
     # Connect to the Chrome server using Selenium WebDriver
     return webdriver.Remote(command_executor=chrome_server_url, options=options)
@@ -40,7 +41,7 @@ def get_title(title):
 
             ######################### get all links  ######################################
                 try:
-                    driver.set_page_load_timeout(20)
+                    driver.set_page_load_timeout(15)
                     print(f"########  {year} - {month} - {day}  ########")
                     driver.get(f"https://medium.com/tag/{title}/archive/{year}/{month}/{day}")
                 
@@ -53,8 +54,8 @@ def get_title(title):
                         print(titles.text)
                         link = article.find_elements(By.TAG_NAME, 'a')[3]
                         link_url = link.get_attribute("href")  
-                        with open("../shared_files/New_links.txt" , 'a') as file :
-                            file.write(f"{titles.text}==={link_url}\n")
+                        with open(f"../shared_files/{title}_links.txt" , 'a') as file :
+                            file.write(f"{titles.text}==={link_url}==={year}-{month}-{day}\n")
                 except: 
                     print("error through find element !!!")
             #######################################################################

@@ -87,33 +87,39 @@ def connect_to_chrome():
 
 @app.route('/sign_in')
 def complete_sign_in():
-    ################    Send email   ######################
-        driver = connect_to_chrome()
-        driver.get("https://medium.com/tag/python/archive/")
-        sign_in = driver.find_element(By.CLASS_NAME,"js-signInButton")
-        sign_in.click()
-        email = driver.find_element(By.CLASS_NAME,"js-emailButton")
-        email.click()
-        sleep(2)
-        input_eamil = driver.find_element(By.ID,"email")
-        input_eamil.send_keys("mediumscraper@outlook.com")
-        sleep(2)
-        click_on_continue = driver.find_element(By.CLASS_NAME , 'button--borderless')
-        click_on_continue.click()
-        sleep(10)
-    ######################################################
-    
-    ################    Use Functins to Read and Regex   ######################
+    while True:
+        try:
+        ################    Send email   ######################
+            driver = connect_to_chrome()
+            driver.get("https://medium.com/tag/python/archive/")
+            sign_in = driver.find_element(By.CLASS_NAME,"js-signInButton")
+            sign_in.click()
+            email = driver.find_element(By.CLASS_NAME,"js-emailButton")
+            email.click()
+            sleep(2)
+            input_eamil = driver.find_element(By.ID,"email")
+            input_eamil.send_keys("mediumscraper@outlook.com")
+            sleep(2)
+            click_on_continue = driver.find_element(By.CLASS_NAME , 'button--borderless')
+            click_on_continue.click()
+            sleep(10)
+        ######################################################
+        
+        ################    Use Functins to Read and Regex   ######################
 
-        email = read_email_for_login()
-        link = regex_and_find_link(email)
-        # url = "http://article_creator:5000/creating_articles"
-        url = "http://article_creator:5000/creating_articles"
-        print(f"######### Your Login Link is : {link} ############")
-        requests.post( url , data=link)
-        print("link was sended.")
-    
-        return "link sended. "
+            email = read_email_for_login()
+            link = regex_and_find_link(email)
+            # url = "http://article_creator:5000/creating_articles"
+            url = "http://article_creator:5000/creating_articles"
+            print(f"######### Your Login Link is : {link} ############")
+            driver.close()
+            break
+        except: 
+            print("there is an error in your sign_in proccess !!!")
+            continue
+        
+    requests.post( url , data=link)
+    return "link sended. "
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
